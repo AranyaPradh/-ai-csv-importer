@@ -254,3 +254,128 @@ Total Skipped: 1
 - Missing CRM fields are returned as blank values where possible.
 - Temporary uploaded CSV files are cleaned up after processing.
 - Do not commit real `.env` files or API keys.
+
+## Docker Setup
+
+The project includes Docker support for frontend, backend, and MongoDB.
+
+Create a root `.env` file from `.env.example`:
+
+```env
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4o-mini
+```
+
+Run the full app with Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+Services:
+
+```txt
+Frontend: http://localhost:3000
+Backend:  http://localhost:5000
+MongoDB:  mongodb://localhost:27017
+```
+
+Stop containers:
+
+```bash
+docker compose down
+```
+
+Remove containers and MongoDB volume:
+
+```bash
+docker compose down -v
+```
+
+## Deployment Guide
+
+### Frontend Deployment: Vercel
+
+1. Push this project to GitHub.
+2. Go to Vercel and create a new project.
+3. Import the GitHub repository.
+4. Set the root directory to:
+
+```txt
+frontend
+```
+
+5. Add environment variable:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=https://your-backend-domain.com/api
+```
+
+6. Deploy.
+
+### Backend Deployment: Render
+
+1. Push this project to GitHub.
+2. Create a new Web Service on Render.
+3. Connect the GitHub repository.
+4. Set the root directory to:
+
+```txt
+backend
+```
+
+5. Set build command:
+
+```bash
+npm install
+```
+
+6. Set start command:
+
+```bash
+npm start
+```
+
+7. Add environment variables:
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_atlas_connection_string
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4o-mini
+```
+
+8. Deploy and copy the backend URL.
+9. Add that backend URL to Vercel as `NEXT_PUBLIC_API_BASE_URL`.
+
+### Backend Deployment: Railway
+
+1. Push this project to GitHub.
+2. Create a new Railway project from GitHub.
+3. Select the backend service/root folder.
+4. Add environment variables:
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_atlas_connection_string
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4o-mini
+```
+
+5. Deploy and use the generated backend domain in the frontend environment variable:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=https://your-railway-backend-domain/api
+```
+
+### Production Database
+
+For hosted deployment, use MongoDB Atlas instead of local MongoDB.
+
+Your production `MONGO_URI` should look like:
+
+```txt
+mongodb+srv://USERNAME:PASSWORD@cluster-url/csv_importer
+```
+
+Never commit real API keys, MongoDB passwords, or `.env` files to GitHub.
